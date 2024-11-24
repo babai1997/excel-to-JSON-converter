@@ -1,26 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { excelToJson } from './utils/excelToJson';
+import TableQuestionMap from './components/TableQuestionMap';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App: React.FC = () => {
+    const [jsonData, setJsonData] = useState<Record<string, any[]> | null>(null);
+
+    const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            try {
+                const data = await excelToJson(file);
+                setJsonData(data);
+            } catch (error) {
+                console.error('Error reading file:', error);
+            }
+        }
+    };
+
+    return (
+        <div>
+            <h1>Excel to JSON Converter</h1>
+            {/* <input type="file" accept=".xlsx, .xls" onChange={handleFileUpload} /> */}
+            {/* {jsonData && (
+                <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
+                    {JSON.stringify(jsonData, null, 4)}
+                </pre>
+            )} */}
+            <TableQuestionMap />
+        </div>
+    );
+};
 
 export default App;
