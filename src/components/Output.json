@@ -1,0 +1,252 @@
+{
+  "header": [
+    {
+      "title": "serial_number",
+      "dataIndex": "serial_number",
+      "key": "serial_number"
+    },
+    {
+      "title": "Variable Name",
+      "dataIndex": "variable_name",
+      "key": "variable_name"
+    },
+    {
+      "title": "Questions",
+      "dataIndex": "questions",
+      "key": "questions"
+    },
+    {
+      "title": "Question Type",
+      "dataIndex": "question_type",
+      "key": "question_type"
+    },
+    {
+      "title": "Possible Options",
+      "dataIndex": "possible_options",
+      "key": "possible_options"
+    }
+  ],
+  "data": [
+    {
+      "serial_number": "1",
+      "variable_name": "MCL_age",
+      "questions": "What is the age of majority?",
+      "question_type": "CAT-ME",
+      "possible_options": [
+        "18 years",
+        "19 years",
+        "21 years"
+      ],
+      "key": "row-1"
+    },
+    {
+      "serial_number": "2",
+      "variable_name": "MCL_exhc",
+      "questions": "Are there any exceptions to the age of majority to consent to health care services?",
+      "question_type": "BIN",
+      "possible_options": [
+        "Yes",
+        "No"
+      ],
+      "key": "row-2"
+    },
+    {
+      "serial_number": "2.1",
+      "variable_name": "MCL_exhctype",
+      "questions": "What types of health care services may a minor receive?",
+      "question_type": "CAT-CA",
+      "possible_options": [
+        "Medical services",
+        "Surgical services",
+        "Hospital services",
+        "Dental services",
+        "Emergency services",
+        "Proposed surgical procedures",
+        "Proposed medical services",
+        "Any non-surgical services"
+      ],
+      "key": "row-2.1"
+    },
+    {
+      "serial_number": "2.2",
+      "variable_name": "MCL_exhcage",
+      "questions": "Do the exceptions only apply to a specific age group?",
+      "question_type": "BIN",
+      "possible_options": [
+        "Yes",
+        "No"
+      ],
+      "key": "row-2.2"
+    },
+    {
+      "serial_number": "2.2.1",
+      "variable_name": "MCL_exhcminage",
+      "questions": "What is the minimum age group?",
+      "question_type": "CAT-ME",
+      "possible_options": [
+        "14 years",
+        "15 years",
+        "16 years",
+        "18 years"
+      ],
+      "key": "row-2.2.1"
+    },
+    {
+      "serial_number": "3",
+      "variable_name": "MCL_exstd",
+      "questions": "Are there any exceptions to the age of majority to consent to health care services that allow minors to receive to STD services?",
+      "question_type": "BIN",
+      "possible_options": [
+        "Yes",
+        "No"
+      ],
+      "key": "row-3"
+    },
+    {
+      "serial_number": "3.1",
+      "variable_name": "MCL_exstdtype",
+      "questions": "What type of STD services may a minor receive?",
+      "question_type": "CAT-CA",
+      "possible_options": [
+        "Diagnostic",
+        "Treatment",
+        "Medical care",
+        "Surgical care",
+        "Hospital care",
+        "Prevention",
+        "Therapeutic procedures",
+        "Examination",
+        "Consultation",
+        "Testing",
+        "Vaccination",
+        "Prescriptions"
+      ],
+      "key": "row-3.1"
+    },
+    {
+      "serial_number": "3.2",
+      "variable_name": "MCL_exstdage",
+      "questions": "Do the exceptions for STD services only apply to a specific age group?",
+      "question_type": "BIN",
+      "possible_options": [
+        "Yes",
+        "No"
+      ],
+      "key": "row-3.2"
+    },
+    {
+      "serial_number": "3.2.1",
+      "variable_name": "MCL_exstdminage",
+      "questions": "What is the minimum age group?",
+      "question_type": "CAT-ME",
+      "possible_options": [
+        "12 years",
+        "14 years",
+        "19 years"
+      ],
+      "key": "row-3.2.1"
+    },
+    {
+      "serial_number": "4",
+      "variable_name": "MCL_extest",
+      "questions": "Are there any exceptions to the age of majority to consent to health care services that allow minors to receive an HIV test?",
+      "question_type": "BIN",
+      "possible_options": [
+        "Yes",
+        "No"
+      ],
+      "key": "row-4"
+    },
+    {
+      "serial_number": "4.1",
+      "variable_name": "MCL_extestage",
+      "questions": "Do the exceptions only apply to a specific age group?",
+      "question_type": "BIN",
+      "possible_options": [
+        "Yes",
+        "No"
+      ],
+      "key": "row-4.1"
+    },
+    {
+      "serial_number": "4.1.1",
+      "variable_name": "MCL_extestminage",
+      "questions": "What is the minimum age group?",
+      "question_type": "CAT-ME",
+      "possible_options": [
+        "12 years",
+        "13 years",
+        "14 years"
+      ],
+      "key": "row-4.1.1"
+    },
+    {
+      "serial_number": "5",
+      "variable_name": "MCL_extreat",
+      "questions": "Are there any exceptions to the age of majority to consent to health care services that allow minors to receive HIV treatment?",
+      "question_type": "BIN",
+      "possible_options": [
+        "Yes",
+        "No"
+      ],
+      "key": "row-5"
+    },
+    {
+      "serial_number": "5.1",
+      "variable_name": "MCL_extreatage",
+      "questions": "Do the exceptions only apply to a specific age group?",
+      "question_type": "BIN",
+      "possible_options": [
+        "Yes",
+        "No"
+      ],
+      "key": "row-5.1"
+    },
+    {
+      "serial_number": "5.1.1",
+      "variable_name": "MCL_extreatminage",
+      "questions": "What is the minimum age group?",
+      "question_type": "CAT-ME",
+      "possible_options": "13 years",
+      "key": "row-5.1.1"
+    },
+    {
+      "serial_number": "6",
+      "variable_name": "MCL_expro",
+      "questions": "Are there any exceptions to the age of majority to consent to health care services that allow minors to receive HIV prophylaxis?",
+      "question_type": "BIN",
+      "possible_options": [
+        "Yes",
+        "No"
+      ],
+      "key": "row-6"
+    },
+    {
+      "serial_number": "6.1",
+      "variable_name": "MCL_exproage",
+      "questions": "Do the exceptions only apply to a specific age group?",
+      "question_type": "BIN",
+      "possible_options": [
+        "Yes",
+        "No"
+      ],
+      "key": "row-6.1"
+    },
+    {
+      "serial_number": "6.1.1",
+      "variable_name": "MCL_exprominage",
+      "questions": "What is the minimum age group?",
+      "question_type": "CAT-ME",
+      "possible_options": "13 years",
+      "key": "row-6.1.1"
+    },
+    {
+      "serial_number": "7",
+      "variable_name": "MCL_text",
+      "questions": "Additional minor consent laws information",
+      "question_type": "TEXT",
+      "possible_options": "",
+      "key": "row-7"
+    }
+  ]
+}
