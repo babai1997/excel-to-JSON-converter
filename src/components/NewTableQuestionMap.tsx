@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import type { GetRef, InputRef, TableProps } from 'antd';
 import { Checkbox, Form, Input, Select, Table, Tag, Button } from 'antd';
-import { excelToJson } from '../utils/excelToJson';
 import CustomSelectInput from './CustomSelectInput';
+import Output from './Output.json';
 type FormInstance<T> = GetRef<typeof Form<T>>;
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
@@ -90,7 +90,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
       // Final validation check before saving
       if (dataIndex === 'order') {
         if (validateOrder && validateOrder(values.order, record.key)) {
-          return;
+          return; // Don't save if validation fails
         }
         // Additional hierarchical validation
         // if (!validateHierarchicalOrder(values.order, dataSource, record.key)) {
@@ -140,11 +140,11 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
 
 export interface DataType {
     order: string;
-    possibleOptions: string[];
-    tempOptionsArray: string[];
+    possible_options: string[];
+    temp_options_array: string[];
     question: string;
-    questionType: string;
-    variableName: string;
+    question_type: string;
+    variable_name: string;
     key: string;
 }
 
@@ -158,100 +158,86 @@ const TableFooter: React.FC<{ onValidate: () => void }> = ({ onValidate }) => (
   </div>
 );
 
-const TableQuestionMap: React.FC = () => {
+const snakeToTitle = (str: string) => {
+    return str
+      .split('_')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
+
+  const initialMappings: Record<string, string> = {
+    order: 'order', 
+    questions: 'questions', 
+    variable_name: 'variable_name', 
+    question_type: 'question_type',
+    possible_options: 'possible_options',
+  };
+
+
+const NewTableQuestionMap: React.FC = () => {
   const [dataSource, setDataSource] = useState<DataType[]>([]);
-  const [columnMappings, setColumnMappings] = useState<Record<string, string>>({});
+  const [columnMappings, setColumnMappings] = useState<Record<string, string>>(initialMappings);
   const [filteredData, setFilteredData] = useState<DataType[]>([]);
+
+  useEffect(() => {
+    //if(!dataSource.length || !filteredData.length){
+      console.log("dataSource.length",dataSource.length);
+      setDataSource(Output.data as any);
+      setFilteredData(Output.data as any);
+    //}
+  }, []);
+
+  
+    // Filter data based on mapping
+    const mapFilterDataAsOption = (dataIndex: string, value: string) => {
+      setFilteredData((prev) => {
+        //console.log(prev,"prev");
+        //console.log(dataIndex,value,"dataIndex: order, value: serial_number");
+        return prev.map((item) => {
+          //console.log(item,"item");
+              if (item.hasOwnProperty(value)) {
+                console.log(1,"item");
+                  const newItem = { ...item }; // Clone the object to avoid direct mutation
+                  (newItem as any)[dataIndex] = (item as any)[value]; // Assign new property
+                  delete (newItem as any)[value]; // Remove old property
+                  //console.log(newItem,"newItem");
+                  return newItem;
+              }
+              return item; // Return unchanged item if condition is not met
+          })
+      });
+      setDataSource(filteredData);
+      console.log(filteredData,"filteredData");
+      //console.log(columnMappings,"columnMappings");
+    }
 
   const validateOrder = (value: string, currentKey: string): boolean => {
     return dataSource.some(item => item.order === value && item.key !== currentKey);
   };
 
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      try {
-        const data = await excelToJson(file);
-        const sheetData = data[Object.keys(data)[3]];
-
-        const formattedData = sheetData.map((item: any, index: number) => {
-          const formattedItem: any = { key: `${index}` };
-          // Dynamically add all properties from the item
-          Object.entries(item).forEach(([key, value]) => {
-            // Convert key to camel case
-            const camelCaseKey = key.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (match, chr) => chr.toUpperCase());
-            
-            // Handle possible options specially if they contain || separator
-            if (typeof value === 'string' && value.includes('||')) {
-              formattedItem[camelCaseKey] = value.split('||').map((opt: string) => opt.trim());
-            } else {
-              formattedItem[camelCaseKey] = value;
-            }
-          });
-          return formattedItem;
-        });
-        console.log(formattedData,"formattedData---");
-
-        setDataSource(formattedData);
-        setFilteredData(formattedData);
-        // Set initial column mappings
-        const initialMappings: Record<string, string> = {};
-        Object.keys(formattedData[0] || {}).forEach(key => {
-          initialMappings[key] = key;
-        });
-        console.log(initialMappings,"initialMappings");
-        
-        setColumnMappings(initialMappings);
-      } catch (error) {
-        console.error('Error reading file:', error);
-      }
-    }
-  };
-
   const handleValidateAndProceed = () => {
     console.log('Table Data:', dataSource);
-    //console.log('Column Mappings:', columnMappings);
+    console.log('filteredData',filteredData);
   };
 
-  const handleColumnMapping = (columnKey: string, mappedValue: string) => {
-    setColumnMappings(prev => ({
+  const handleColumnMapping = (dataIndex: string, mappedValue: string) => {
+    setColumnMappings((prev) => ({
       ...prev,
-      [columnKey]: mappedValue
+      [dataIndex]: mappedValue
     }));
-
-    // Filter data based on mapping
-    const newFilteredData = dataSource.filter(item => {
-      return item[columnKey as keyof DataType]?.toString().includes(mappedValue);
-    });
-    setFilteredData(dataSource);
+    //console.log(columnMappings,"columnMappings----");
+    mapFilterDataAsOption(dataIndex, mappedValue);
   };
   
 //dataIndex is the key of the column
   const renderColumnTitle = (dataIndex: string) => {
-    const mappingOptions = dataSource.length > 0 ? Object.keys(dataSource[0]) : [];
-    const displayColumnTitle = (option: string) => {
-      switch(option) {
-        case 'order':
-          return 'Order';
-        case 'question':
-          return 'Question';
-        case 'questionType':
-          return 'Question Type';
-        case 'variableName':
-          return 'Variable Name';
-        case 'possibleOptions':
-          return 'Possible Options';
-        default:
-          return option;
-      }
-    }
-    
+    const mappingOptions = Output.header.length > 0 ? Output.header.map((header: any) => (header.dataIndex)) : [];
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Select
           style={{ width: '100%', border: 'none' }}
           placeholder="Map column"
-          value={displayColumnTitle(columnMappings[dataIndex] || dataIndex)}
+          value={(snakeToTitle(dataIndex))}
           onChange={(value) => handleColumnMapping(dataIndex, value)}
           bordered={false}
           dropdownRender={menu => (
@@ -259,14 +245,15 @@ const TableQuestionMap: React.FC = () => {
               {mappingOptions.map(option => (
                 <div key={option} style={{ padding: '8px 12px' }}>
                   <Checkbox
-                    checked={columnMappings[dataIndex] === option}
+                    checked={columnMappings[dataIndex] === (option)}
                     onChange={(e) => {
                       if (e.target.checked) {
                         handleColumnMapping(dataIndex, option);
+                        console.log(columnMappings,"columnMappings");
                       }
                     }}
                   >
-                    {(option)}
+                    {snakeToTitle(option)}
                   </Checkbox>
                 </div>
               ))}
@@ -291,8 +278,8 @@ const TableQuestionMap: React.FC = () => {
       editable: true,
     },
     {
-      title: renderColumnTitle('questionType'),
-      dataIndex: 'questionType', 
+      title: renderColumnTitle('question_type'),
+      dataIndex: 'question_type', 
       width: '15%',
       editable: false,
       render: (_: string, record: DataType) => {
@@ -300,11 +287,11 @@ const TableQuestionMap: React.FC = () => {
         return (
           <Select
             style={{ width: '100%' }}
-            defaultValue={record.questionType}
+            defaultValue={record.question_type}
             onChange={(value) => {
               handleSave({
                 ...record,
-                questionType: value
+                question_type: value
               });
             }}
           >
@@ -318,32 +305,34 @@ const TableQuestionMap: React.FC = () => {
       }
     },
     {
-      title: renderColumnTitle('variableName'),
-      dataIndex: 'variableName', 
+      title: renderColumnTitle('variable_name'),
+      dataIndex: 'variable_name', 
       width: '20%',
       editable: true,
     },
     {
-      title: renderColumnTitle('possibleOptions'),
-      dataIndex: 'possibleOptions',
+      title: renderColumnTitle('possible_options'),
+      dataIndex: 'possible_options', 
       width: '20%',
       editable: false,
       render: (options: string[], record: DataType) => {
-        if (record.questionType === 'TEXT') {
+        if (record.question_type === 'TEXT') {
           return null;
         }
 
-        // let optionsArray = Array.isArray(options) ? options : [];
-        
-        if (record.questionType === 'BIN') {
-          const tempOptionsArray = [...record.possibleOptions];
-          record.possibleOptions = ['YES', 'NO'];
-          record.tempOptionsArray = tempOptionsArray;
+        if (record.question_type === 'BIN') {
+          // Store original options before overwriting
+          const tempOptionsArray = [...record.possible_options];
+          record.temp_options_array = tempOptionsArray;
+          
+          // Set binary options
+          record.possible_options = ['YES', 'NO'];
+          
           return (
             <>
-              {record.possibleOptions.map(option => (
+              {record.possible_options.map(option => (
                 <Tag 
-                  key={option} 
+                  key={option}
                   color="#5c7784"
                   style={{ marginRight: 3 }}
                 >
@@ -353,13 +342,18 @@ const TableQuestionMap: React.FC = () => {
             </>
           );
         }
-        record.possibleOptions = record.tempOptionsArray?.length>0 ? record.tempOptionsArray : record.possibleOptions;
+
+        // For non-BIN types, restore original options if temp array exists
+        if (record.temp_options_array?.length > 0) {
+          console.log(record.temp_options_array,"record.temp_options_array");
+          record.possible_options = record.temp_options_array;
+        }
 
         return (
           <CustomSelectInput
             key={record.key}
-            options={Array.isArray(record.possibleOptions) ? record.possibleOptions : []}
-            name={`possibleOptions-${record.key}`}
+            options={Array.isArray(record.possible_options) ? record.possible_options : []}
+            name={`possible_options-${record.key}`}
             label="Possible Option tags"
             placeholder={'Add possible options tag'}
             mode="tags"
@@ -396,17 +390,13 @@ const TableQuestionMap: React.FC = () => {
   ];
 
   const handleSave = (row: DataType) => {
-    console.log(row,"row---");
+    //console.log(row,"row---");
     
     const newData = [...dataSource];
     const index = newData.findIndex((item) => row.key === item.key);
-    //const item = newData[index];
     newData[index] = row
-    // newData.splice(index, 1, {
-    //   ...item,
-    //   ...row,
-    // });
-    console.log(newData,"newData---");
+
+    //console.log(newData,"newData---");
     
     setDataSource(newData);
     setFilteredData(newData);
@@ -439,14 +429,11 @@ const TableQuestionMap: React.FC = () => {
 
   return (
     <div style={{ height: 'calc(100vh - 120px)', display: 'flex', flexDirection: 'column' }}>
-      <span>
-        <input type="file" accept=".xlsm" onChange={handleFileUpload} style={{ marginBottom: 16 }} />
-      </span>
       <Table<DataType>
         components={components}
         rowClassName={() => 'editable-row'}
         bordered
-        dataSource={filteredData as DataType[]}
+        dataSource={filteredData}
         columns={columns as ColumnTypes}
         pagination={false}
         scroll={{ y: 'calc(100vh - 250px)' }}
@@ -458,4 +445,4 @@ const TableQuestionMap: React.FC = () => {
   );
 };
 
-export default TableQuestionMap;
+export default NewTableQuestionMap;

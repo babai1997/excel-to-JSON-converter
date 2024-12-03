@@ -1,0 +1,142 @@
+[
+    [
+      "Order",
+      "Variable Name",
+      "Questions",
+      "Question Type",
+      "Possible Options"
+    ],
+    [
+      1,
+      "MCL_age",
+      "What is the age of majority?",
+      "CAT-ME",
+      "18 years || 19 years || 21 years"
+    ],
+    [
+      2,
+      "MCL_exhc",
+      "Are there any exceptions to the age of majority to consent to health care services?",
+      "BIN",
+      "Yes || No"
+    ],
+    [
+      2.1,
+      "MCL_exhctype",
+      "What types of health care services may a minor receive?",
+      "CAT-CA",
+      "Medical services || Surgical services || Hospital services || Dental services || Emergency services || Proposed surgical procedures || Proposed medical services || Any non-surgical services"
+    ],
+    [
+      2.2,
+      "MCL_exhcage",
+      "Do the exceptions only apply to a specific age group?",
+      "BIN",
+      "Yes || No"
+    ],
+    [
+      "2.2.1",
+      "MCL_exhcminage",
+      "What is the minimum age group?",
+      "CAT-ME",
+      "14 years || 15 years  || 16 years || 18 years"
+    ],
+    [
+      3,
+      "MCL_exstd",
+      "Are there any exceptions to the age of majority to consent to health care services that allow minors to receive to STD services?",
+      "BIN",
+      "Yes || No"
+    ],
+    [
+      3.1,
+      "MCL_exstdtype",
+      "What type of STD services may a minor receive?",
+      "CAT-CA",
+      "Diagnostic || Treatment || Medical care || Surgical care || Hospital care || Prevention || Therapeutic procedures || Examination  || Consultation  || Testing  || Vaccination || Prescriptions"
+    ],
+    [
+      3.2,
+      "MCL_exstdage",
+      "Do the exceptions for STD services only apply to a specific age group?",
+      "BIN",
+      "Yes || No"
+    ],
+    [
+      "3.2.1",
+      "MCL_exstdminage",
+      "What is the minimum age group?",
+      "CAT-ME",
+      "12 years || 14 years || 19 years"
+    ],
+    [
+      4,
+      "MCL_extest",
+      "Are there any exceptions to the age of majority to consent to health care services that allow minors to receive an HIV test?",
+      "BIN",
+      "Yes || No"
+    ],
+    [
+      4.1,
+      "MCL_extestage",
+      "Do the exceptions only apply to a specific age group?",
+      "BIN",
+      "Yes || No"
+    ],
+    [
+      "4.1.1",
+      "MCL_extestminage",
+      "What is the minimum age group?",
+      "CAT-ME",
+      "12 years || 13 years || 14 years"
+    ],
+    [
+      5,
+      "MCL_extreat",
+      "Are there any exceptions to the age of majority to consent to health care services that allow minors to receive HIV treatment?",
+      "BIN",
+      "Yes || No"
+    ],
+    [
+      5.1,
+      "MCL_extreatage",
+      "Do the exceptions only apply to a specific age group?",
+      "BIN",
+      "Yes || No"
+    ],
+    [
+      "5.1.1",
+      "MCL_extreatminage",
+      "What is the minimum age group?",
+      "CAT-ME",
+      "13 years"
+    ],
+    [
+      6,
+      "MCL_expro",
+      "Are there any exceptions to the age of majority to consent to health care services that allow minors to receive HIV prophylaxis?",
+      "BIN",
+      "Yes || No"
+    ],
+    [
+      6.1,
+      "MCL_exproage",
+      "Do the exceptions only apply to a specific age group?",
+      "BIN",
+      "Yes || No"
+    ],
+    [
+      "6.1.1",
+      "MCL_exprominage",
+      "What is the minimum age group?",
+      "CAT-ME",
+      "13 years"
+    ],
+    [
+      6,
+      "MCL_text",
+      "Additional minor consent laws information",
+      "TEXT",
+      ""
+    ]
+]
